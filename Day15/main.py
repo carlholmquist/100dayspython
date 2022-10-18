@@ -1,3 +1,5 @@
+# logic of it works, not very readable, needs some rework
+
 MENU = {
     "espresso" : {
         "ingredients" : {
@@ -26,9 +28,9 @@ MENU = {
 }
 
 resources = {
-    "water" : 623,
+    "water" : 52,
     "milk" : 400,
-    "grounds" : 76,
+    "grounds" : 1,
 }
 
 coins = {
@@ -40,19 +42,20 @@ coins = {
 total_money = 0
 
 def check_resources(action):
-    enough_resuorces = True
-    for key in resources:
+    enough_resuorces = True #Collecting variable to check availability of resources
+    for key in resources: #Check that there's enough of all types of resources
         if MENU[action]['ingredients'][key] >= resources[key]:
             print(f"There is not enough {key}")
             enough_resuorces = False
-        elif enough_resuorces==True:
+    for key in resources: # If there's enough resources of all types, deduct required amounts from storage
+        if enough_resuorces==True:
             resources[key] = resources[key] - MENU[action]['ingredients'][key]
-    if enough_resuorces == False:
+    if enough_resuorces == False: #If any or multiple resources are missing
        return False
 
 
-def check_action (action):
-    if action == "report":
+def check_action (action): #Creating different paths for different actions user typed in
+    if action == "report": 
         print(f"Water:  {resources['water']} ml")
         print(f"Milk:   {resources['milk']} ml")
         print(f"Coffee: {resources['grounds']} g")
@@ -65,15 +68,14 @@ def check_action (action):
     else:
         return 2
 
-running = True
 
-while running:
+while True: #While loop so program returns to the start at the end of each action cycle
     action = input("what would you like to have (espresso/latte/cappuccino)?")
     
-    action_type = check_action(action)
+    action_type = check_action(action) #Determine what action the user takes
 
     if action_type == 1: #Valid coffee
-        if check_resources(action) == False:
+        if check_resources(action) == False: #Determine resource, if insufficient, restart loop
             continue
     elif action_type == 0: #exit
         break
